@@ -1,9 +1,3 @@
-<%@ page trimDirectiveWhitespaces="true"%>
-<%@ page import="org.displaytag.util.ParamEncoder" %>
-<%@ page import="org.displaytag.tags.TableTagParameters" %>
-<%@ include file="/common/taglibs.jsp"%>
-<%@page import="com.triumphlearning.icore.security.SecurityUtils"%>
-<%@page import="com.triumphlearning.icore.core.Constants"%>
 
 <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -36,7 +30,7 @@
             annotationUser: '1',
             path: '/WebViewer2022', // path to the PDFTron 'lib' folder on your server
             licenseKey: 'School Specialty, LLC (schoolspecialty.com):OEM:Coach Digital Compass, Catchup with Coach::B+:AMS(20240111):72A5F0AD04D7E60A0360B13AC9A2537860617F4EC770EDF85C0A45DA3C3020EE7AF231F5C7',
-            initialDoc: '${pdfDoc}',
+            initialDoc: 'OT_PS_OT112_M4_L1.xod',
             // initialDoc: '/path/to/my/file.pdf', // You can also use documents on your server
             disabledElements: [
                 'languageButton',
