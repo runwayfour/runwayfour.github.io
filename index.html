@@ -74,7 +74,24 @@
                         type: 'actionButton',
                         label: "Pause",
                         onClick: async () =>  {
+                            console.log("AM1 ");
+                            console.log( annotationManager);
+                            console.log("AM2 ");
+                            console.log( annotationManager.exportAnnotations());
+
+                            annotationManager.exportAnnotations().then(v => {
+console.log("got back value")
+console.log(v);
+                            }).catch(ex => {
+                                console.log("got back exception")
+console.log(ex);
+
+                            });
+
+                            // NOTE: this is here becuase this is what the actual site does
                             const xfdfString = await annotationManager.exportAnnotations();
+
+
 
                            console.log("calling pause");
                            console.log(xfdfString);
