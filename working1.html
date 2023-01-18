@@ -1,0 +1,175 @@
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src='/WebViewer2022/webviewer.min.js'></script>
+<script src="/alerts/jAlert.min.js"></script>
+<link rel="stylesheet" type="text/css" media="all"
+      href="/alerts/jAlert.css"/>
+
+
+<div style="padding-top: 30px;">
+    <div class="pathway clearfix" style="margin-bottom: 0px!important; height: auto!important;">
+
+        <div style="float:left">
+            Test Title
+        </div>
+        <div style="float:right;margin-right:57px;margin-top:9px;">
+            <a href='#' onclick="" id="btn_back" class="btn green_header" style="cursor: pointer;"><i></i><span><i></i><span></span><fmt:message key="button.back" /></span></a>
+        </div>
+    </div>
+
+    <div id='viewer' style='width: 891px; height: 1212px; margin: 20px auto;'></div>
+
+</div>
+<script language="javascript">
+    $(function() {
+
+
+        WebViewer({
+            annotationUser: '1',
+            path: '/WebViewer2022', // path to the PDFTron 'lib' folder on your server
+            licenseKey: 'School Specialty, LLC (schoolspecialty.com):OEM:Coach Digital Compass, Catchup with Coach::B+:AMS(20240111):72A5F0AD04D7E60A0360B13AC9A2537860617F4EC770EDF85C0A45DA3C3020EE7AF231F5C7',
+            initialDoc: 'cnn1.pdf',
+            // initialDoc: '/path/to/my/file.pdf', // You can also use documents on your server
+            disabledElements: [
+                'languageButton',
+                'outlinesPanelButton',
+                'squigglyToolGroupButton',
+                'polygonCloudToolGroupButton',
+                'linkButton',
+                'thumbDelete',
+                'pageManipulationOverlayButton',
+
+
+            ],
+        }, document.getElementById('viewer'))
+            .then(instance => {
+                const { documentViewer, annotationManager } = instance.Core;
+
+
+                instance.UI.setToolbarGroup('toolbarGroup-Annotate');
+                instance.UI.disableElements(['toolbarGroup-Insert']);
+                instance.UI.disableElements(['toolbarGroup-FillAndSign']);
+                instance.UI.disableElements(['toolbarGroup-Forms']);
+                instance.UI.disableElements(['toolbarGroup-Edit']);
+
+                instance.UI.setCustomNoteFilter(a => { return (a.Subject === 'Note'); } );
+
+                annotationManager.setAnnotationDisplayAuthorMap((userId) => {
+                        return 'Guest';
+
+                });
+
+                instance.UI.setHeaderItems(header => {
+                    const items = header.getItems();
+
+                    items.splice(9,1);
+                    //items.splice(10,1);
+                    /* note: above to re-enable search.. back to 9,2 to remove */
+                    //items.splice(0,2);
+
+
+                    header.push({
+                        type: 'actionButton',
+                        label: "Pause",
+                        onClick: async () =>  {
+                            console.log("AM1 ");
+                            console.log( annotationManager);
+                            console.log("AM2 ");
+                            console.log( annotationManager.exportAnnotations());
+
+                            annotationManager.exportAnnotations().then(v => {
+console.log("got back value")
+console.log(v);
+                            }).catch(ex => {
+                                console.log("got back exception")
+console.log(ex);
+
+                            });
+
+                            // NOTE: this is here becuase this is what the actual site does
+                          //  const xfdfString = await annotationManager.exportAnnotations();
+
+
+
+                           //console.log("calling pause");
+                           //console.log(xfdfString);
+
+                        }
+                    });
+                    header.push({
+                        type: 'actionButton',
+                        label: "Finish",
+                        onClick: async () =>  {
+
+
+
+                            $.jAlert({
+                                'type': 'confirm',
+                                'title': 'Are you sure?',
+                                'confirmQuestion': 'Are you ready to submit your test? You will not be able to make any changes.',
+                                'theme': 'gray',
+                                'size': 'md',
+                                'showAnimation': 'fadeInUp',
+                                'hideAnimation': 'fadeOutDown',
+                                onConfirm: async (e,btn) => {
+
+
+                                    const xfdfString = await annotationManager.exportAnnotations();
+                                    console.log("calling finish");
+                                        console.log(xfdfString);
+
+                                }
+                            });
+
+                        }
+                    });
+                });
+
+
+
+                documentViewer.addEventListener('documentLoaded', () => {
+
+                   /* fetch('/student/assignInteractiveLoad?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
+                        method: 'GET'
+                    }).then( response => {
+                        if (response.status === 200) {
+                            response.text().then(async xfdfString => {
+                                // <xfdf>
+                                // <add>
+                                // <text subject="Comment" page="0" color="#FFE6A2" ... />
+                                // </add>
+                                // <modify />
+                                // <delete />
+                                // </xfdf>
+
+                                const annotations = await annotationManager.importAnnotations(xfdfString);
+                                console.log(annotations);
+
+                            });
+                        }
+                    });*/
+                });
+
+
+
+
+
+                annotationManager.addEventListener('annotationChanged', async (annotations, action, { imported }) =>  {
+                    if (imported) return;
+
+                    const xfdfString = await annotationManager.exportAnnotations();
+
+                    console.log("calling save");
+                           console.log(xfdfString);
+
+
+                /*    fetch('/student/assignInteractiveSave?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
+                        method: 'POST',
+                        body: xfdfString // written to a database in the server
+                    });*/
+                });
+            });
+    });
+</script>
