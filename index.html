@@ -76,14 +76,8 @@
                         onClick: async () =>  {
                             const xfdfString = await annotationManager.exportAnnotations();
 
-                            fetch('/student/assignInteractiveSave?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
-                                method: 'POST',
-                                body: xfdfString // written to a database in the server
-                            }).then( response => {
-                                if (response.status === 200) {
-                                    location = '/student/dashboard.html';
-                                }
-                            });
+                           console.log("calling pause");
+                           console.log(xfdfString);
 
                         }
                     });
@@ -106,25 +100,9 @@
 
 
                                     const xfdfString = await annotationManager.exportAnnotations();
+                                    console.log("calling finish");
+                                        console.log(xfdfString);
 
-                                    fetch('/student/assignInteractiveSave?finished=true&assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
-                                        method: 'POST',
-                                        body: xfdfString // written to a database in the server
-                                    }).then( response => {
-                                        if (response.status === 200) {
-                                            $.jAlert({
-                                                'title': 'Assignment Submitted',
-                                                'content': 'The assignment has been submitted successfully.',
-                                                'theme': 'gray',
-                                                'size': 'md',
-                                                'showAnimation': 'fadeInUp',
-                                                'hideAnimation': 'fadeOutDown',
-                                                onClose: async (e, btn) => {
-                                                    location = '/student/dashboard.html';
-                                                }
-                                            });
-                                        }
-                                    });
                                 }
                             });
 
@@ -136,7 +114,7 @@
 
                 documentViewer.addEventListener('documentLoaded', () => {
 
-                    fetch('/student/assignInteractiveLoad?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
+                   /* fetch('/student/assignInteractiveLoad?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
                         method: 'GET'
                     }).then( response => {
                         if (response.status === 200) {
@@ -154,7 +132,7 @@
 
                             });
                         }
-                    });
+                    });*/
                 });
 
 
@@ -166,10 +144,14 @@
 
                     const xfdfString = await annotationManager.exportAnnotations();
 
-                    fetch('/student/assignInteractiveSave?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
+                    console.log("calling save");
+                           console.log(xfdfString);
+
+
+                /*    fetch('/student/assignInteractiveSave?assignmentID=${assignmentId}&studentAssignmentID=${studentAssignmentId}', {
                         method: 'POST',
                         body: xfdfString // written to a database in the server
-                    });
+                    });*/
                 });
             });
     });
